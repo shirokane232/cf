@@ -9,7 +9,10 @@ export default defineNuxtConfig({
     preset: 'cloudflare-pages'
   },
   runtimeConfig: {
+    threadsClientSecret: process.env.THREADS_CLIENT_SECRET,
     public: {
+      threadsClientId: 'threadsClientId',
+      threadsRedirectUri: 'threadsClientId',
       commitHash: commitHash,
       commitTime: commitTime,
     }
