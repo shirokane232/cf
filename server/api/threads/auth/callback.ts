@@ -32,9 +32,7 @@ export default defineEventHandler(async (event) => {
       method: 'POST',
       body,
     });
-
     const data = await response.json();
-
     if (response.ok) {
       return data
     } else {
