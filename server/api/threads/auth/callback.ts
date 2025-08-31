@@ -11,29 +11,33 @@ export default defineEventHandler(async (event) => {
   if (code.endsWith('#_')) {
     code = code.slice(0, -2);
   }
-  return {
-    code
+  
+  const config = useRuntimeConfig();
+  const clientId = config.public.threadsClientId as string;
+  const clientSecret = config.threadsClientSecret as string;
+  const redirectUri = config.public.threadsRedirectUri as string;
+
+  const body = new URLSearchParams();
+  body.append('client_id', clientId);
+  body.append('client_secret', clientSecret);
+  body.append('grant_type', 'authorization_code');
+  body.append('redirect_uri', redirectUri);
+  body.append('code', code);
+
+  try {
+    const response = await fetch('https://graph.threads.net/oauth/access_token', {
+      method: 'POST',
+      body,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data
+    } else {
+      return { success: false, error: data.error_message || 'Failed to get access token' };
+    }
+  } catch (err) {
+    return { success: false, error: 'Network request failed.' };
   }
-//   const clientId = '您的_CLIENT_ID';
-//   const clientSecret = '您的_CLIENT_SECRET';
-//   const redirectUri = '您的_REDIRECT_URI';
-
-//   const tokenUrl = `https://graph.threads.com/v1.0/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectUri}&code=${code}`;
-
-//   try {
-//     const response = await fetch(tokenUrl, {
-//       method: 'GET',
-//     });
-
-//     const data = await response.json();
-
-//     if (response.ok) {
-//       const accessToken = data.access_token;
-//       return { success: true, accessToken, data };
-//     } else {
-//       return { success: false, error: data.error_message || 'Failed to get access token' };
-//     }
-//   } catch (err) {
-//     return { success: false, error: 'Network request failed.' };
-//   }
 });
