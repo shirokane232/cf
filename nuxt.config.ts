@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     threadsClientSecret: process.env.THREADS_CLIENT_SECRET,
     public: {
       threadsClientId: '1287619736243236',
-      threadsRedirectUri: 'https://cf-9l8.pages.dev/api/threads/auth/callback',
+      threadsRedirectPath: '/api/threads/auth/callback',
       commitHash: commitHash,
       commitTime: commitTime,
     }

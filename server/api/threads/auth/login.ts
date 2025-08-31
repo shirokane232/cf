@@ -1,9 +1,13 @@
 import { defineEventHandler, sendRedirect } from 'h3';
 
 export default defineEventHandler(async (event) => {
+  const host = event.headers.get('x-forwarded-host') || event.headers.get('host');
+  const protocol = event.headers.get('x-forwarded-proto') || 'http';
+  const serverDomain = `${protocol}://${host}`;
   const config = useRuntimeConfig();
   const clientId = config.public.threadsClientId;
-  const redirectUri = config.public.threadsRedirectUri;
+  const redirectPath = config.public.threadsRedirectPath as string;
+  const redirectUri = `${serverDomain}${redirectPath}`
 
   if (!clientId || !redirectUri) {
     return { error: 'Client ID or Redirect URI not configured.' };

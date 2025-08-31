@@ -11,11 +11,14 @@ export default defineEventHandler(async (event) => {
   if (code.endsWith('#_')) {
     code = code.slice(0, -2);
   }
-  
+  const host = event.headers.get('x-forwarded-host') || event.headers.get('host');
+  const protocol = event.headers.get('x-forwarded-proto') || 'http';
+  const serverDomain = `${protocol}://${host}`;
   const config = useRuntimeConfig();
   const clientId = config.public.threadsClientId as string;
   const clientSecret = config.threadsClientSecret as string;
-  const redirectUri = config.public.threadsRedirectUri as string;
+  const redirectPath = config.public.threadsRedirectPath as string;
+  const redirectUri = `${serverDomain}${redirectPath}`
 
   const body = new URLSearchParams();
   body.append('client_id', clientId);
