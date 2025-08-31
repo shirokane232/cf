@@ -5,13 +5,10 @@ export default defineEventHandler(async (event) => {
   const clientId = config.public.threadsClientId;
   const redirectUri = config.public.threadsRedirectUri;
 
-  // 檢查必要的環境變數是否已設定
   if (!clientId || !redirectUri) {
     return { error: 'Client ID or Redirect URI not configured.' };
   }
 
-  const authUrl = `https://graph.threads.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=threads_basic&response_type=code`;
-
-  // 執行重新導向到 Threads 授權頁面
+  const authUrl = `https://threads.net/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=threads_basic,threads_content_publish,threads_read_replies,threads_manage_replies,threads_manage_insights&response_type=code&state=test`;
   return sendRedirect(event, authUrl);
 });
