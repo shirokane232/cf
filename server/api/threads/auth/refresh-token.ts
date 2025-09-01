@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!access_token || !user_id) {
     return { success: false, error: "Missing access_token or user_id." };
   }
-  
+
   const params = new URLSearchParams();
   params.append("grant_type", "th_refresh_token");
   params.append("access_token", access_token);
