@@ -63,9 +63,18 @@ export default defineEventHandler(async (event) => {
       };
     }
 
+    const getMeResponse = await fetch(`https://graph.threads.net/v1.0/me?fields=id,username,name,threads_profile_picture_url,threads_biography,is_verified&access_token=${shortLiveAccessToken.access_token}`);
+    const me = await getMeResponse.json();
+    if (!getMeResponse.ok) {
+      return {
+        success: false,
+        error: "Failed to get me",
+      };
+    }
+
     return {
       access_token: longLiveToken.access_token,
-      user_id: shortLiveAccessToken.user_id,
+      user_id: me.id,
     };
   } catch (err) {
     return { success: false, error: "Network request failed." };
